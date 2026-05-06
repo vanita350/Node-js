@@ -1,0 +1,87 @@
+<h1 style="text-align: center;">Edit book</h1>
+<!-- <form action="/addbook" method="post" > -->
+<form action="/editbook/<%= singleObj._id%>" method="post" enctype="multipart/form-data">
+    <table border="1" , align="center">
+        <tr>
+            <td>name</td>
+            <td><input type="text" name="title" value="<%= singleObj.title%>"></td>
+        </tr>
+
+        <tr>
+            <td>Price</td>
+            <td><input type="text" name="price" value="<%= singleObj.price %>"></td>
+        </tr>
+
+        <tr>
+            <td>Enter Book page</td>
+            <td>
+                <input type="radio" name="pages" value="50-100pages" <%=singleObj.pages==='50-100pages' ? 'checked' : ''
+                    %> >50-100pages
+
+                <input type="radio" name="pages" value="100-200pages" <%=singleObj.pages==='100-200pages' ? 'checked'
+                    : '' %> >100-200pages
+
+                <input type="radio" name="pages" value="200-400pages" <%=singleObj.pages==='200-400pages' ? 'checked'
+                    : '' %> >200-400pages
+
+                <input type="radio" name="pages" value="400-500pages" <%=singleObj.pages==='400-500pages' ? 'checked'
+                    : '' %> >400-500pages
+
+                <input type="radio" name="pages" value="500-800pages" <%=singleObj.pages==='500-800pages' ? 'checked'
+                    : '' %> >500-800pages
+            </td>
+        </tr>
+
+        <tr>
+            <td>Type</td>
+            <td>
+                <input type="checkbox" name="booktype[]" value="programming" <% if
+                    (singleObj.booktype.includes('programming')){%> checked <%} %>>programming
+                    <input type="checkbox" name="booktype[]" value="scripting" <% if
+                        (singleObj.booktype.includes('scripting')){%> checked <%} %>>scripting
+                        <input type="checkbox" name="booktype[]" value="coding" <% if
+                            (singleObj.booktype.includes('coding')){%> checked <%} %>>coding
+
+            </td>
+        </tr>
+
+        <% cityData=["surat","ahamdabad","rajcot"]%>
+            <tr>
+                <td>Select City</td>
+                <td>
+                    <select name="city" id="">
+                        <option value="">Select City</option>
+                        <% cityData.map((v,i)=>{ %>
+
+                            <option value="<%= v%>" <% if(singleObj.city==v){%>selected<%}%>>
+                                    <%= v%>
+                            </option>
+
+                            <% })%>
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Description</td>
+                <td>
+                    <textarea name="description"><%= singleObj.description %></textarea>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Upload image</td>
+                <td>
+                    <input type="file" name="avatar">
+                    <img src="<%= singleObj.image %>" height="100">
+                </td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td><input type="submit" name="submit" value="Editbook"></td>
+            </tr>
+
+
+    </table>
+</form>
