@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Store - Edit Movie</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .form-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input[type="text"],
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input[type="text"]:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .radio-group, .checkbox-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .radio-group label, .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: normal;
+            cursor: pointer;
+        }
+        
+        .radio-group input, .checkbox-group input {
+            cursor: pointer;
+        }
+        
+        .form-group input[type="file"] {
+            padding: 10px;
+            border: 2px dashed #e0e0e0;
+            border-radius: 8px;
+            width: 100%;
+            cursor: pointer;
+        }
+        
+        .current-image {
+            margin-top: 10px;
+        }
+        
+        .current-image img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 Edit Movie</h1>
+        
+        <div class="form-container">
+            <form action="/editmovie/<%= singleObj._id%>" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="title">Movie Title</label>
+                    <input type="text" id="title" name="title" value="<%= singleObj.title%>" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="price">Price (₹)</label>
+                    <input type="text" id="price" name="price" value="<%= singleObj.price %>" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Duration</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="duration" value="1-2hours" <%=singleObj.duration==='1-2hours' ? 'checked' : ''%>> 1-2 hours</label>
+                        <label><input type="radio" name="duration" value="2-3hours" <%=singleObj.duration==='2-3hours' ? 'checked' : ''%>> 2-3 hours</label>
+                        <label><input type="radio" name="duration" value="3-4hours" <%=singleObj.duration==='3-4hours' ? 'checked' : ''%>> 3-4 hours</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Genre</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="genre[]" value="action" <% if(singleObj.genre.includes('action')){%> checked <%} %>> Action</label>
+                        <label><input type="checkbox" name="genre[]" value="comedy" <% if(singleObj.genre.includes('comedy')){%> checked <%} %>> Comedy</label>
+                        <label><input type="checkbox" name="genre[]" value="drama" <% if(singleObj.genre.includes('drama')){%> checked <%} %>> Drama</label>
+                        <label><input type="checkbox" name="genre[]" value="horror" <% if(singleObj.genre.includes('horror')){%> checked <%} %>> Horror</label>
+                        <label><input type="checkbox" name="genre[]" value="romance" <% if(singleObj.genre.includes('romance')){%> checked <%} %>> Romance</label>
+                        <label><input type="checkbox" name="genre[]" value="thriller" <% if(singleObj.genre.includes('thriller')){%> checked <%} %>> Thriller</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <select name="city" id="city" required>
+                        <option value="">Select City</option>
+                        <% cityData=["surat","ahamdabad","rajcot"]%>
+                        <% cityData.map((v,i)=>{ %>
+                            <option value="<%= v%>" <% if(singleObj.city==v){%>selected<%}%>><%= v%></option>
+                        <% })%>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" required><%= singleObj.description %></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="avatar">Update Movie Poster</label>
+                    <input type="file" id="avatar" name="avatar" accept="image/*">
+                    <div class="current-image">
+                        <p style="margin-bottom: 5px; color: #666;">Current poster:</p>
+                        <img src="<%= singleObj.image %>" alt="<%= singleObj.title %>">
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-btn">Update Movie</button>
+            </form>
+            
+            <a href="/" class="back-btn">← Back to Movie List</a>
+        </div>
+    </div>
+</body>
+</html>
