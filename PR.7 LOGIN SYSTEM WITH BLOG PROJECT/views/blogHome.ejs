@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Blog Home</title>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>📝 BlogHub</h1>
+                </div>
+                <div class="auth-buttons">
+                    <% if (userId) { %>
+                        <a href="/createBlog" class="add-blog-btn">
+                            <span>+ Add Blog</span>
+                        </a>
+                        <a href="/logout" class="logout-btn">
+                            <span>Logout</span>
+                        </a>
+                    <% } else { %>
+                        <a href="/login" class="login-btn">
+                            <span>Login</span>
+                        </a>
+                        <a href="/register" class="register-btn">
+                            <span>Register</span>
+                        </a>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <h2>Welcome to BlogHub</h2>
+                <p>Discover amazing stories and share your thoughts</p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="search-section">
+        <div class="container">
+            <div class="search-box">
+                <input type="text" placeholder="Search blogs..." id="searchInput">
+                <button onclick="searchBlogs()">
+                    🔍 Search
+                </button>
+            </div>
+        </div>
+    </section>
+    
+    <section class="blog-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Latest Blogs</h2>
+                <p class="blog-count"><%= blogData.length %> blogs available</p>
+            </div>
+            <div class="blog-grid">
+                <% blogData.map((v,i)=>{%>
+                    <div class="blog-card">
+                        <div class="card-image">
+                            <img src="<%=v.image%>" alt="<%=v.title%>">
+                            <div class="card-overlay">
+                                <span class="category-badge"><%= v.category[0] || 'General' %></span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">
+                                <%=v.title%>
+                            </h3>
+                            <p class="card-description">
+                                <%= v.description%>
+                            </p>
+                            <div class="card-categories">
+                                <%v.category.map((val,index)=>{%>
+                                    <span class="category-tag">
+                                        <%=val%>
+                                    </span>
+                                    <%})%>
+                            </div>
+                            <div class="card-footer">
+                                <a href="/viewBlog/?blogId=<%= v._id %>" class="read-more-btn">
+                                    Read More →
+                                </a>
+                                <div class="card-actions">
+                                    <a href="/editBlog?blogId=<%= v._id %>" class="action-btn edit-btn" title="Edit">
+                                        ✏️
+                                    </a>
+                                    <a href="javascript:void(0)"
+                                       class="action-btn delete-btn"
+                                       onclick="openModal('/deleteBlog?blogId=<%= v._id %>')"
+                                       title="Delete">
+                                        🗑️
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <%})%>
+            </div>
+        </div>
+    </section>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal-content">
+            <h3>Are you sure?</h3>
+            <p>This action cannot be undone. Do you really want to delete this blog?</p>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" onclick="closeModal()">Cancel</button>
+                <button class="modal-btn confirm" onclick="confirmDelete()">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let deleteUrl = '';
+
+        function openModal(url) {
+            deleteUrl = url;
+            document.getElementById('deleteModal').classList.add('active');
+        }
+
+        function closeModal() {
+            deleteUrl = '';
+            document.getElementById('deleteModal').classList.remove('active');
+        }
+
+        function confirmDelete() {
+            if (deleteUrl) {
+                window.location.href = deleteUrl;
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('deleteModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Search functionality
+        function searchBlogs() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.blog-card');
+            
+            cards.forEach(card => {
+                const title = card.querySelector('.card-title').textContent.toLowerCase();
+                const description = card.querySelector('.card-description').textContent.toLowerCase();
+                const categories = card.querySelector('.card-categories').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm) || categories.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Search on Enter key
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchBlogs();
+            }
+        });
+    </script>
+</body>
+
+</html>

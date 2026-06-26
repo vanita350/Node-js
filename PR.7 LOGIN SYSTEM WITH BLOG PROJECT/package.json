@@ -1,0 +1,44 @@
+{
+
+  "scripts": {
+
+    "start": "node app.js"
+
+  },
+
+  "dependencies": {
+
+    "bcryptjs": "^3.0.3",
+
+    "ejs": "^3.1.10",
+
+    "express": "^5.2.1",
+
+    "express-session": "^1.19.0",
+
+    "mongodb": "^6.18.0",
+
+    "mongoose": "^8.17.1",
+
+    "multer": "^2.0.2"
+
+  },
+
+  "name": "pr.5-blog",
+
+  "version": "1.0.0",
+
+  "description": "",
+
+  "main": "app.js",
+
+  "keywords": [],
+
+  "author": "",
+
+  "license": "ISC",
+
+  "type": "commonjs"
+
+}
+
