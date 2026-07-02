@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>View Blog</title>
+</head>
+
+<body>
+
+    <div class="view_blog">
+        <div class="container">
+        <a href="/home" class="back-btn">Back to Blogs</a>
+
+        <div class="blog-card">
+            <h1 class="blog-title">
+                <%= blog.title %>
+            </h1>
+            <img src="<%= blog.image %>" alt="<%= blog.title %>" class="blog-image">
+            <p class="blog-desc">
+                <%= blog.description %>
+            </p>
+
+            <ul class="categories">
+                <% blog.category.map((val)=>{ %>
+                    <li>
+                        <%= val %>
+                    </li>
+                    <% }) %>
+            </ul>
+
+            <div class="action-buttons">
+
+    <a href="/editBlog?blogId=<%= blog._id %>" class="edit-btn">
+        Edit
+    </a>
+
+    <a href="javascript:void(0)"
+       class="delete-btn"
+       onclick="openModal('/deleteBlog?blogId=<%= blog._id %>')">
+        Delete
+    </a>
+
+
+</div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal-content">
+            <h3>Are you sure?</h3>
+            <p>This action cannot be undone. Do you really want to delete this blog?</p>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" onclick="closeModal()">Cancel</button>
+                <button class="modal-btn confirm" onclick="confirmDelete()">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let deleteUrl = '';
+
+        function openModal(url) {
+            deleteUrl = url;
+            document.getElementById('deleteModal').classList.add('active');
+        }
+
+        function closeModal() {
+            deleteUrl = '';
+            document.getElementById('deleteModal').classList.remove('active');
+        }
+
+        function confirmDelete() {
+            if (deleteUrl) {
+                window.location.href = deleteUrl;
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('deleteModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+
+</html>

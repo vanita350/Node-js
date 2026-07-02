@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add book datails</title>
+</head>
+
+<body>
+    <h1 style="text-align: center;">Add book</h1>
+
+    <form action="/addbook" method="post" enctype="multipart/form-data">
+        <table border="1" , align="center">
+            <tr>
+                <td>name</td>
+                <td><input type="text" name="title"></td>
+            </tr>
+
+            <tr>
+                <td>Price</td>
+                <td><input type="text" name="price"></td>
+            </tr>
+
+            <tr>
+                <td>Enter Book page</td>
+                <td>
+                    <input type="radio" name="pages" value="50-100pages">50-100 pages
+                    <input type="radio" name="pages" value="100-200pages">100-200 pages
+                    <input type="radio" name="pages" value="200-400pages">200-400 pages
+                    <input type="radio" name="pages" value="400-500pages">400-500 pages
+                    <input type="radio" name="pages" value="500-800pages">500-800 pages
+                </td>
+            </tr>
+
+            <tr>
+                <td>Type</td>
+                <td>
+                    <input type="checkbox" name="booktype[]" value="programming">programming
+                    <input type="checkbox" name="booktype[]" value="scripting">scripting
+                    <input type="checkbox" name="booktype[]" value="coding">coding
+
+                </td>
+            </tr>
+            <% cityData=["surat","ahamdabad","rajcot"]%>
+                <tr>
+                    <td>Select City</td>
+                    <td>
+                        <select name="city" id="">
+                            <option value="">Select City</option>
+                            <% cityData.map((v,i)=>{ %>
+
+                                <option value="<%= v%>">
+                                    <%= v%>
+                                </option>
+
+                                <% })%>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Description</td>
+                    <td>
+                        <textarea name="description" id=""></textarea>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Upload image</td>
+                    <td>
+                        <input type="file" name="avatar">
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td></td>
+                    <td><input type="submit" name="submit" value="Addbook"></td>
+                </tr>
+
+
+        </table>
+    </form>
+
+    <br>
+    <table align="center" border="1">
+        <tr>
+            <td>Title</td>
+            <td>Price</td>
+            <td>Pages</td>
+            <td>Type</td>
+            <td>City</td>
+            <td>Description</td>
+            <td>Image</td>
+            <td>Action</td>
+        </tr>
+        <% bookdatails.map((v,i)=>{ %>
+            <tr>
+                <td>
+                    <%= v.title%>
+                </td>
+                <td>
+                    <%= v.price%>
+                </td>
+                <td>
+                    <%= v.pages%>
+                </td>
+                <td>
+                    <%= v.booktype%>
+                </td>
+                <td>
+                    <%= v.city%>
+                </td>
+                <td>
+                    <%= v.description%>
+                </td>
+                <td>
+                    <img src="<%= v.image%>" height="100"/>
+                </td>
+                <td><a href="/deleteStu/?id=<%= v._id %>">Delete</a>
+                    ||
+                    <button><a href="/getBookDetails/<%=v._id%>"
+                            style="text-decoration: none; color: black;">update</a></button>
+                </td>
+            </tr>
+            <%}) %>
+
+
+    </table>
+
+</body>
+
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Edit Blog</title>
+</head>
+
+<body>
+    <section class="add-blog d-flex justify-content-center align-items-center">
+        <div class="add-form">
+            <h2>Edit Blog</h2>
+            <a href="/home" class="back-btn">Back to Blogs</a>
+            <form action="/updateBlog?blogId=<%= blog._id %>" method="post" enctype="multipart/form-data">
+                <div class="current-image">
+                    <label>Current Image:</label>
+                    <img src="<%= blog.image %>" alt="Current Image">
+                </div>
+                <label>Change Image:</label>
+                <input type="file" name="image">
+                
+                <label>Blog Title:</label>
+                <input type="text" name="title" value="<%= blog.title %>" placeholder="Blog Title">
+                
+                <label>Description:</label>
+                <textarea name="description" placeholder="Write your blog description here..."><%= blog.description %></textarea>
+                
+                <label>Categories:</label>
+                <div class="checkbox-group">
+                    <div>
+                        <input class="checkbox" type="checkbox" name="category" value="Company Culture" <%= blog.category.includes("Company Culture") ? "checked" : "" %>>
+                        <label>Company Culture</label>
+                    </div>
+                    <div>
+                        <input class="checkbox" type="checkbox" name="category" value="Communication" <%= blog.category.includes("Communication") ? "checked" : "" %>>
+                        <label>Communication</label>
+                    </div>
+                    <div>
+                        <input class="checkbox" type="checkbox" name="category" value="Facilation" <%= blog.category.includes("Facilation") ? "checked" : "" %>>
+                        <label>Facilation</label>
+                    </div>
+                </div>
+                
+                <button type="submit">Update Blog</button>
+            </form>
+        </div>
+    </section>
+</body>
+
+</html>
