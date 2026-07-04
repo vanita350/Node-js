@@ -15,5 +15,18 @@
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "sweetalert2": "^11.26.25"
-  }
+  },
+  "name": "pr.8-make-admin-panel-on-requiremnt",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "devDependencies": {},
+ "scripts": {
+  "start": "node app.js",
+  "dev": "nodemon app.js"
+},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
 }
