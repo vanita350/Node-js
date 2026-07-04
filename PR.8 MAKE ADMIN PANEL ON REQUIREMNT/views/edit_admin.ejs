@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon.png">
+    <title>Matrix Template - The Ultimate Multipurpose admin template</title>
+    <link href="/assets/libs/flot/css/float-chart.css" rel="stylesheet">
+    <link href="/dist/css/style.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="preloader">
+        <div class="lds-ripple">
+            <div class="lds-pos"></div>
+            <div class="lds-pos"></div>
+        </div>
+    </div>
+    <div id="main-wrapper">
+        <%- include('header'); %>
+            <div class="page-wrapper">
+                <div class="page-breadcrumb">
+                    <div class="row">
+                        <div class="col-12 d-flex no-block align-items-center">
+                            <h4 class="page-title">Edit Adminpage</h4>
+                            <div class="ml-auto text-right">
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Library</li>
+                                    </ol>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <% var editName=oldAdminData.name.split("")%>
+                                    <form class="form-horizontal" method="post" action="/EditAdminData/<%= oldAdminData.id %>"
+                                        enctype="multipart/form-data">
+                                        <div class="card-body">
+                                            <h4 class="card-title">Edit Personal Info</h4>
+                                            <div class="form-group row">
+                                                <label for="fname"
+                                                    class="col-sm-3 text-right control-label col-form-label">First
+                                                    Name</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" id="fname" name="fname"
+                                                        placeholder="First Name Here" value="<%= oldAdminData.name %>">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="lname"
+                                                    class="col-sm-3 text-right control-label col-form-label">Last
+                                                    Name</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" id="lname" name="lname"
+                                                        placeholder="Last Name Here" value="<%= oldAdminData.name %>">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="fname"
+                                                    class="col-sm-3 text-right control-label col-form-label">Enter
+                                                    Email</label>
+                                                <div class="col-sm-9">
+                                                    <input type="email" class="form-control" id="email" name="email"
+                                                        placeholder="Enter Email Here"
+                                                        value="<%= oldAdminData.email %>">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="lname"
+                                                    class="col-sm-3 text-right control-label col-form-label">Password</label>
+                                                <div class="col-sm-9">
+                                                    <input type="password" class="form-control" id="lname"
+                                                        name="password" placeholder="Password Here"
+                                                        value="<%= oldAdminData.password %>">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-md-3">Select Gender</label>
+                                                <div class="col-md-9">
+                                                    <div class="custom-control custom-radio">
+                                                        <input type="radio" class="custom-control-input"
+                                                            id="customControlValidation1" name="gender" value="male"
+                                                          
+                                                            <% if(oldAdminData.gender=='male'){%>checked <% } %>
+                                                            >
+                                                        <label class="custom-control-label"
+                                                            for="customControlValidation1">Male</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio">
+                                                        <input type="radio" class="custom-control-input"
+                                                            id="customControlValidation2" name="gender" value="female"
+                                                              <% if(oldAdminData.gender=='female'){%>checked <% } %>
+                                                            >
+                                                        <label class="custom-control-label"
+                                                            for="customControlValidation2">Female</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-md-3">Hobby</label>
+                                                <div class="col-md-9">
+                                                    <div class="custom-control custom-checkbox mr-sm-2">
+                                                        <input type="checkbox" class="custom-control-input"
+                                                            name="hobby[]" value="reading"
+                                                          <% if(oldAdminData.hobby.includes('reading' ) ) { %> checked <%} %>
+
+                                                            id="customControlAutosizing1">
+                                                        <label class="custom-control-label"
+                                                            for="customControlAutosizing1">Reading</label>
+                                                    </div>
+                                                    <div class="custom-control custom-checkbox mr-sm-2">
+                                                        <input type="checkbox" class="custom-control-input"
+                                                            name="hobby[]" value="cycling"
+                                                               <% if(oldAdminData.hobby.includes('cycling' ) ) { %> checked <%} %>
+                                                            id="customControlAutosizing2">
+                                                        <label class="custom-control-label"
+                                                            for="customControlAutosizing2">
+                                                            Cycling</label>
+                                                    </div>
+                                                    <div class="custom-control custom-checkbox mr-sm-2">
+                                                        <input type="checkbox" class="custom-control-input"
+                                                            name="hobby[]" value="adventure"
+                                                               <% if(oldAdminData.hobby.includes('adventure' ) ) { %> checked <%} %>
+                                                            id="customControlAutosizing3">
+                                                        <label class="custom-control-label"
+                                                            for="customControlAutosizing3">Adventure</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="form-group row">
+                                                <label for="cono1"
+                                                    class="col-sm-3 text-right control-label col-form-label">Message</label>
+                                                <div class="col-sm-9">
+                                                     <textarea class="form-control" name="description"><%= oldAdminData.description %></textarea>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="form-group row">
+                                                <label class="col-md-3">File Upload</label>
+                                                <div class="col-md-9">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input"
+                                                            id="validatedCustomFile" name="avatar" >
+                                                        <label class="custom-file-label"
+                                                            for="validatedCustomFile">Choose
+                                                            file...</label>
+
+                                                            <img src="<%= oldAdminData.avatar %>" height="100" />
+                                                        <div class="invalid-feedback">Example invalid custom file
+                                                            feedback
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                        <div class="border-top">
+                                            <div class="card-body">
+                                                <button type="submit" value="Add Admin" class="btn btn-primary">Edit
+                                                    Admin</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <%- include('footer'); %>
+            </div>
+    </div>
+
+    <script src="/assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="/assets/libs/popper.js/dist/umd/popper.min.js"></script>
+    <script src="/assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js"></script>
+    <script src="/assets/extra-libs/sparkline/sparkline.js"></script>
+    <script src="/dist/js/waves.js"></script>
+    <script src="/dist/js/sidebarmenu.js"></script>
+    <script src="/dist/js/custom.min.js"></script>
+</body>
+
+</html>
