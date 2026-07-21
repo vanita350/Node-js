@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Error – RecipeCraft 🍳</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+  <%- include('partials/navbar') %>
+
+  <div class="error-page">
+    <div class="fade-in-up">
+      <span class="error-icon">🥘</span>
+      <h1>Oops! Something went wrong</h1>
+      <p><%= message || 'An unexpected error occurred.' %></p>
+      <div class="d-flex gap-2" style="justify-content: center; flex-wrap: wrap;">
+        <a href="/recipes" class="btn btn-primary">🏠 Go Home</a>
+        <a href="javascript:history.back()" class="btn btn-secondary">← Go Back</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>Made with ❤️ by <strong>RecipeCraft</strong> &nbsp;|&nbsp; Share the Joy of Cooking 🍳</p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="<%= recipe.description %>" />
+  <title><%= recipe.title %> – RecipeCraft 🍳</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+  <%- include('partials/navbar') %>
+
+  <div class="recipe-detail">
+
+    <!-- Recipe Image -->
+    <div class="recipe-detail-image fade-in-up">
+      <% if (recipe.image) { %>
+        <img src="<%= recipe.image %>" alt="<%= recipe.title %>" />
+      <% } else { %>
+        <div class="recipe-detail-image-placeholder">
+          <%= recipe.category === 'Breakfast' ? '🍳' :
+              recipe.category === 'Dessert' ? '🎂' :
+              recipe.category === 'Beverage' ? '🥤' :
+              recipe.category === 'Soup' ? '🍲' :
+              recipe.category === 'Salad' ? '🥗' :
+              recipe.category === 'Snack' ? '🍿' :
+              recipe.category === 'Lunch' ? '🥪' :
+              recipe.category === 'Dinner' ? '🍖' :
+              recipe.category === 'Appetizer' ? '🥘' : '🍴' %>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- Header -->
+    <div class="recipe-detail-header fade-in-up">
+      <div class="recipe-detail-badges">
+        <span class="badge badge-primary"><%= recipe.category %></span>
+        <span class="badge <%= recipe.difficulty === 'Easy' ? 'badge-green' : recipe.difficulty === 'Hard' ? 'badge' : 'badge-secondary' %>"
+              style="<%= recipe.difficulty === 'Hard' ? 'background:#c0392b;color:white;' : '' %>">
+          <%= recipe.difficulty %>
+        </span>
+      </div>
+
+      <h1 class="recipe-detail-title"><%= recipe.title %></h1>
+      <p style="color: var(--color-text-muted); font-size: 1.05rem; margin-bottom: 20px;">
+        <%= recipe.description %>
+      </p>
+
+      <!-- Author Card -->
+      <% if (recipe.author) { %>
+        <div class="author-card">
+          <div class="author-avatar">
+            <%= recipe.author.username.charAt(0).toUpperCase() %>
+          </div>
+          <div class="author-info">
+            <strong>👨‍🍳 <%= recipe.author.username %></strong>
+            <small>
+              Posted on <%= recipe.createdAt.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %>
+              <% if (recipe.updatedAt > recipe.createdAt) { %>
+                · Updated <%= recipe.updatedAt.toLocaleDateString() %>
+              <% } %>
+            </small>
+          </div>
+        </div>
+      <% } %>
+
+      <!-- Action Buttons (owner or admin) -->
+      <% if (currentUser && recipe.author && (currentUser._id.toString() === recipe.author._id.toString() || currentUser.role === 'admin')) { %>
+        <div class="recipe-actions">
+          <a href="/recipes/<%= recipe._id %>/edit" class="btn btn-secondary">✏️ Edit Recipe</a>
+          <form action="/recipes/<%= recipe._id %>/delete" method="POST"
+                onsubmit="return confirm('Are you sure you want to delete this recipe?')">
+            <button type="submit" class="btn btn-danger">🗑️ Delete Recipe</button>
+          </form>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="recipe-detail-meta-grid fade-in-up">
+      <div class="recipe-detail-meta-item">
+        <span class="meta-icon">⏱</span>
+        <span class="meta-value"><%= recipe.cookTime %> min</span>
+        <span class="meta-label">Cook Time</span>
+      </div>
+      <div class="recipe-detail-meta-item">
+        <span class="meta-icon">👥</span>
+        <span class="meta-value"><%= recipe.servings %></span>
+        <span class="meta-label">Servings</span>
+      </div>
+      <div class="recipe-detail-meta-item">
+        <span class="meta-icon">🎯</span>
+        <span class="meta-value"><%= recipe.difficulty %></span>
+        <span class="meta-label">Difficulty</span>
+      </div>
+      <div class="recipe-detail-meta-item">
+        <span class="meta-icon">💬</span>
+        <span class="meta-value"><%= recipe.comments.length %></span>
+        <span class="meta-label">Reviews</span>
+      </div>
+      <div class="recipe-detail-meta-item">
+        <span class="meta-icon">🌿</span>
+        <span class="meta-value"><%= recipe.ingredients.length %></span>
+        <span class="meta-label">Ingredients</span>
+      </div>
+    </div>
+
+    <!-- Ingredients -->
+    <div class="recipe-detail-section fade-in-up">
+      <h2>🌿 Ingredients</h2>
+      <ul class="ingredients-list">
+        <% recipe.ingredients.forEach(ingredient => { %>
+          <li><%= ingredient %></li>
+        <% }); %>
+      </ul>
+    </div>
+
+    <!-- Instructions -->
+    <div class="recipe-detail-section fade-in-up">
+      <h2>📝 Instructions</h2>
+      <div class="instructions-text"><%= recipe.instructions %></div>
+    </div>
+
+    <!-- Comments Section -->
+    <div class="comments-section fade-in-up">
+      <h2>💬 Reviews & Comments (<%= recipe.comments.length %>)</h2>
+
+      <!-- Comment Form (logged in users only) -->
+      <% if (currentUser) { %>
+        <div class="comment-form">
+          <h3>✍️ Leave a Review</h3>
+          <form action="/recipes/<%= recipe._id %>/comments" method="POST">
+
+            <!-- Star Rating -->
+            <div class="form-group">
+              <label class="form-label">Rating (optional)</label>
+              <div class="star-rating">
+                <input type="radio" id="star5" name="rating" value="5" />
+                <label for="star5" title="5 stars">★</label>
+                <input type="radio" id="star4" name="rating" value="4" />
+                <label for="star4" title="4 stars">★</label>
+                <input type="radio" id="star3" name="rating" value="3" />
+                <label for="star3" title="3 stars">★</label>
+                <input type="radio" id="star2" name="rating" value="2" />
+                <label for="star2" title="2 stars">★</label>
+                <input type="radio" id="star1" name="rating" value="1" />
+                <label for="star1" title="1 star">★</label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="comment-input">Your Comment <span style="color: var(--color-secondary);">*</span></label>
+              <textarea
+                id="comment-input"
+                name="content"
+                class="form-textarea"
+                placeholder="What did you think about this recipe? Any tips or modifications?"
+                required
+                maxlength="500"
+                style="min-height: 90px;"
+              ></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Post Review 🚀</button>
+          </form>
+        </div>
+      <% } else { %>
+        <div class="alert alert-info">
+          <a href="/login" style="font-weight: 700; color: var(--color-primary);">Login</a> or
+          <a href="/register" style="font-weight: 700; color: var(--color-primary);">register</a>
+          to leave a review.
+        </div>
+      <% } %>
+
+      <!-- Comment List -->
+      <% if (recipe.comments.length === 0) { %>
+        <div class="empty-state" style="padding: 40px 20px;">
+          <span class="empty-state-icon" style="font-size: 3rem;">💭</span>
+          <h3 style="font-size: 1.2rem;">No reviews yet</h3>
+          <p>Be the first to share your thoughts!</p>
+        </div>
+      <% } else { %>
+        <% recipe.comments.forEach(comment => { %>
+          <div class="comment-card">
+            <div class="comment-avatar">
+              <%= comment.author ? comment.author.username.charAt(0).toUpperCase() : '?' %>
+            </div>
+            <div class="comment-content">
+              <div class="comment-header">
+                <div>
+                  <span class="comment-author"><%= comment.author ? comment.author.username : 'Anonymous' %></span>
+                  <% if (comment.rating) { %>
+                    <span class="comment-stars">
+                      <% for(let i = 0; i < comment.rating; i++) { %> ★ <% } %>
+                      <% for(let i = comment.rating; i < 5; i++) { %> ☆ <% } %>
+                    </span>
+                  <% } %>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span class="comment-date"><%= comment.createdAt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %></span>
+                  <!-- Delete button for own comment or admin -->
+                  <% if (currentUser && comment.author && (currentUser._id.toString() === comment.author._id.toString() || currentUser.role === 'admin')) { %>
+                    <form action="/recipes/<%= recipe._id %>/comments/<%= comment._id %>/delete" method="POST" style="display:inline;">
+                      <button type="submit" class="comment-delete-btn" title="Delete comment">✕</button>
+                    </form>
+                  <% } %>
+                </div>
+              </div>
+              <p class="comment-text"><%= comment.content %></p>
+            </div>
+          </div>
+        <% }); %>
+      <% } %>
+    </div>
+
+    <!-- Back Link -->
+    <div class="text-center mt-3 mb-3">
+      <a href="/recipes" class="btn btn-secondary">← Back to All Recipes</a>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>Made with ❤️ by <strong>RecipeCraft</strong> &nbsp;|&nbsp; Share the Joy of Cooking 🍳</p>
+  </footer>
+
+</body>
+</html>

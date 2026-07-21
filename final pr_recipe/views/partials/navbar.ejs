@@ -1,0 +1,57 @@
+<!-- ═══════════════════════════════════════════════
+     NAVBAR PARTIAL – Culinary Recipe Platform
+     ════════════════════════════════════════════ -->
+<nav class="navbar">
+  <div class="nav-container">
+
+    <!-- Brand Logo -->
+    <a href="/recipes" class="nav-brand">
+      <span class="nav-brand-icon">🍳</span>
+      <span class="nav-brand-text">RecipeCraft</span>
+    </a>
+
+    <!-- Navigation Links -->
+    <div class="nav-links">
+      <!-- Always visible -->
+      <a href="/recipes" class="nav-link">
+        🍽️ All Recipes
+      </a>
+      <a href="/recipes/new" class="nav-link nav-cta">
+        ✚ New Recipe
+      </a>
+
+      <% if (currentUser) { %>
+        <!-- Logged-in links -->
+        <a href="/recipes/my" class="nav-link">
+          📖 My Recipes
+        </a>
+
+        <!-- User info badge -->
+        <div class="nav-user-info">
+          <div class="user-avatar">
+            <%= currentUser.username.charAt(0).toUpperCase() %>
+          </div>
+          <span><%= currentUser.username %></span>
+          <span class="nav-role-badge <%= currentUser.role %>">
+            <%= currentUser.role %>
+          </span>
+        </div>
+
+        <!-- Logout -->
+        <a href="/logout" class="nav-link nav-logout">
+          🚪 Logout
+        </a>
+
+      <% } else { %>
+        <!-- Guest links -->
+        <a href="/login" class="nav-link">
+          🔑 Login
+        </a>
+        <a href="/register" class="nav-link nav-cta">
+          🌟 Sign Up
+        </a>
+      <% } %>
+    </div>
+
+  </div>
+</nav>

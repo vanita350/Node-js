@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="<%= recipe ? 'Edit your recipe' : 'Create a new recipe' %> on RecipeCraft." />
+  <title><%= recipe ? 'Edit Recipe' : 'New Recipe' %> – RecipeCraft 🍳</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+  <%- include('partials/navbar') %>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="page-header-content">
+      <h1><%= recipe ? '✏️ Edit Recipe' : '🍴 Create New Recipe' %></h1>
+      <p><%= recipe ? 'Update your culinary masterpiece' : 'Share your delicious creation with the world' %></p>
+    </div>
+  </div>
+
+  <div class="recipe-form-container">
+    <div class="recipe-form-card fade-in-up">
+
+      <% if (error) { %>
+        <div class="alert alert-error">⚠️ <%= error %></div>
+      <% } %>
+
+      <form
+        action="/recipes<%= recipe ? '/' + recipe._id + '/edit' : '' %>"
+        method="POST"
+        id="recipe-form"
+        enctype="multipart/form-data"
+      >
+        <!-- ── Basic Info ── -->
+        <div class="form-section-title">📋 Basic Information</div>
+
+        <div class="form-group">
+          <label class="form-label" for="title">Recipe Title <span>*</span></label>
+          <input
+            id="title"
+            type="text"
+            name="title"
+            class="form-input"
+            placeholder="e.g., Grandma's Famous Chocolate Cake"
+            value="<%= recipe ? recipe.title : '' %>"
+            required
+            maxlength="100"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="description">Short Description <span>*</span></label>
+          <textarea
+            id="description"
+            name="description"
+            class="form-textarea"
+            placeholder="Describe your recipe in a few sentences..."
+            maxlength="500"
+            required
+            style="min-height: 90px;"
+          ><%= recipe ? recipe.description : '' %></textarea>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="category">Category <span>*</span></label>
+            <select id="category" name="category" class="form-select" required>
+              <% categories.forEach(cat => { %>
+                <option value="<%= cat %>" <%= recipe && recipe.category === cat ? 'selected' : '' %>>
+                  <%= cat %>
+                </option>
+              <% }); %>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="difficulty">Difficulty</label>
+            <select id="difficulty" name="difficulty" class="form-select">
+              <option value="Easy" <%= recipe && recipe.difficulty === 'Easy' ? 'selected' : '' %>>Easy 😊</option>
+              <option value="Medium" <%= !recipe || recipe.difficulty === 'Medium' ? 'selected' : '' %>>Medium 👨‍🍳</option>
+              <option value="Hard" <%= recipe && recipe.difficulty === 'Hard' ? 'selected' : '' %>>Hard 🏆</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="cookTime">⏱ Cook Time (minutes)</label>
+            <input
+              id="cookTime"
+              type="number"
+              name="cookTime"
+              class="form-input"
+              min="1"
+              max="999"
+              placeholder="30"
+              value="<%= recipe ? recipe.cookTime : 30 %>"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="servings">👥 Servings</label>
+            <input
+              id="servings"
+              type="number"
+              name="servings"
+              class="form-input"
+              min="1"
+              max="100"
+              placeholder="4"
+              value="<%= recipe ? recipe.servings : 4 %>"
+            />
+          </div>
+        </div>
+
+        <!-- ── Image ── -->
+        <div class="form-section-title mt-2">🖼️ Recipe Image</div>
+        <div class="form-group">
+          <label class="form-label" for="image">Upload Image</label>
+          <input
+            id="image"
+            type="file"
+            name="image"
+            class="form-input"
+            accept="image/*"
+            onchange="const preview = document.getElementById('image-preview'); if(this.files && this.files[0]){ preview.src = URL.createObjectURL(this.files[0]); preview.style.display = 'block'; } else { preview.style.display = 'none'; }"
+          />
+          <span class="form-hint">Choose an image file from your device (JPG, PNG, WEBP, GIF)</span>
+          <img 
+            id="image-preview" 
+            src="<%= recipe && recipe.image ? recipe.image : '' %>" 
+            style="max-width: 100%; max-height: 250px; margin-top: 10px; border-radius: var(--radius-sm); object-fit: cover; display: <%= recipe && recipe.image ? 'block' : 'none' %>;" 
+            alt="Image Preview" 
+          >
+        </div>
+
+        <!-- ── Ingredients ── -->
+        <div class="form-section-title mt-2">🌿 Ingredients</div>
+        <div class="form-group">
+          <label class="form-label" for="ingredients">Ingredients <span>*</span></label>
+          <textarea
+            id="ingredients"
+            name="ingredients"
+            class="form-textarea"
+            placeholder="Enter each ingredient on a new line:&#10;2 cups flour&#10;1 tsp salt&#10;3 eggs"
+            required
+            style="min-height: 150px;"
+          ><%= recipe ? recipe.ingredients.join('\n') : '' %></textarea>
+          <span class="form-hint">One ingredient per line</span>
+        </div>
+
+        <!-- ── Instructions ── -->
+        <div class="form-section-title mt-2">📝 Instructions</div>
+        <div class="form-group">
+          <label class="form-label" for="instructions">Step-by-Step Instructions <span>*</span></label>
+          <textarea
+            id="instructions"
+            name="instructions"
+            class="form-textarea"
+            placeholder="Step 1: Preheat the oven to 350°F...&#10;Step 2: Mix the dry ingredients...&#10;Step 3: ..."
+            required
+            style="min-height: 200px;"
+          ><%= recipe ? recipe.instructions : '' %></textarea>
+        </div>
+
+        <!-- ── Submit ── -->
+        <div class="d-flex gap-2 flex-wrap mt-3">
+          <button type="submit" class="btn btn-primary btn-lg" id="submit-btn">
+            <%= recipe ? '💾 Update Recipe' : '🚀 Publish Recipe' %>
+          </button>
+          <a href="<%= recipe ? '/recipes/' + recipe._id : '/recipes' %>" class="btn btn-secondary btn-lg">
+            Cancel
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>Made with ❤️ by <strong>RecipeCraft</strong> &nbsp;|&nbsp; Share the Joy of Cooking 🍳</p>
+  </footer>
+
+</body>
+</html>
